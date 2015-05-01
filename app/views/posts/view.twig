@@ -1,0 +1,50 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="page-header">
+            {{ post.getTitle() }}
+        </h1>
+
+        <p> {{ post.getCategory().getName() }}</p>
+
+        <p class="lead">
+            by {{ post.getUser().getUsername() }}
+        </p>
+
+        <p>{{ post.getText() }}</p>
+        <hr>
+        <hr>
+    </div>
+
+    <div class="row">
+        <h2>
+            <a href="#">Comments</a>
+        </h2>
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            {% for comment in comments %}
+                <div class="row">
+                    <h3>
+                        <a href="#"> {{ comment.getUser().getUsername() }}</a>
+                    </h3>
+                    {{ comment.getText() }}
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <form method="post">
+                <input type="hidden" value="{{ token }}" name="formToken">
+                <textarea class="form-control" name="commentText"></textarea>
+                <br>
+                <input type="submit" class="btn" value="Submit Comment">
+            </form>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+{% endblock %}

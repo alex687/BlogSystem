@@ -1,0 +1,60 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="page-header">
+            Registration
+        </h1>
+
+        <div class="col-md-8">
+            <form method="post">
+                <input type="hidden" value="{{ token }}" name="formToken">
+
+                <div class="row">
+                    <div class="col-md-12"><input type="text" name="username" class="form-control"
+                                                  placeholder="Username" {{ 'value='~ oldInput.username ~'' | default('') }}>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12"><input type="password" name="password" class="form-control"
+                                                  placeholder="Password"></div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12"><input type="email" name="email" class="form-control"
+                                                  placeholder="Email" {{ 'value='~ oldInput.email ~'' | default('') }}>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12"><input type="text" name="firstName" class="form-control"
+                                                  placeholder="First Name" {{ 'value='~ oldInput.firstName ~'' | default('') }}>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-12"><input type="text" name="lastName" class="form-control"
+                                                  placeholder="Last Name" {{ 'value='~ oldInput.lastName ~'' | default('') }}>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Submit" class="btn pull-right">
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ error | default("") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
