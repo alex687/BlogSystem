@@ -16,4 +16,13 @@ class CategoryDao
     {
         return  $entityManager->getRepository("Models\\Category")->find($id);
     }
+
+    public static function add(EntityManager $entityManager, $name)
+    {
+        $category = new Category();
+        $category->setName($name);
+
+        $entityManager->persist($category);
+        return $category;
+    }
 }

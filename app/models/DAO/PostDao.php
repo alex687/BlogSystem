@@ -23,6 +23,7 @@ class PostDao
         $post->setText($text);
         $post->setCategory($category);
         $post->setTitle($title);
+        $post->setDate(new \DateTime());
 
         $entityManager->persist($post);
 

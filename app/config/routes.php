@@ -1,9 +1,7 @@
 <?php
 use Routing\Route;
 
-Route::create("admin/posts/{action}/{id}", array("controller" => "PostAdmin"));
-
-Route::create("admin/posts/{action}", array("controller" => "PostAdmin", "action" => "all"));
+Route::create("search", array("controller" => "Post", "action" => "search"));
 
 Route::create("{controller}/{action}/{id}", array());
 

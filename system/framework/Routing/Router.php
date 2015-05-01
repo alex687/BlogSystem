@@ -1,7 +1,9 @@
 <?php
 namespace Routing;
 
+use Controllers\ErrorController;
 use Routes\RouteCompilerInterface;
+use URL\URL;
 
 class Router
 {
@@ -31,7 +33,7 @@ class Router
                     } elseif (isset($defaultParamValues[$paramName])) {
                         $routeParamsValues[$paramName] = $defaultParamValues[$paramName];
                     } elseif ($parameterInfo["isRequired"]) {
-                        //TODO : Not Found 404 Response
+                        continue;
                     }
                 }
                 if (empty($routeParamsValues["controller"])) {
@@ -42,17 +44,21 @@ class Router
                     }
                 }
                 $controller = $this->getController($routeParamsValues["controller"]);
-                $methodParameters = $routeParamsValues;
-                unset($methodParameters["controller"]);
-                unset($methodParameters["action"]);
-
-                $this->callFunction($controller, $routeParamsValues["action"], $methodParameters);
-
-                break;
+                if ($controller) {
+                    $methodParameters = $routeParamsValues;
+                    unset($methodParameters["controller"]);
+                    unset($methodParameters["action"]);
+                    if (method_exists($controller, $routeParamsValues["action"])) {
+                        $this->callFunction($controller, $routeParamsValues["action"], $methodParameters);
+                        return;
+                    }
+                }
             }
         }
 
-        //TODO : Not Found 404 Response
+       $error = new ErrorController();
+       $error->notFound();
+
     }
 
     private function getController($controllerName)
@@ -61,9 +67,9 @@ class Router
 
         if (class_exists($controllerFullName)) {
             return new $controllerFullName();
-        } else {
-            throw new ControllerNotFoundException("The $controllerName was not found");
         }
+
+        return false;
     }
 
     private function callFunction($controller, $functionName, $parameters)

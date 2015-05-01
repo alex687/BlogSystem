@@ -17,7 +17,7 @@ class Comment
     protected $user_id;
 
     /**
-     * @ManyToOne(targetEntity="User", cascade={"all"}, fetch="LAZY")
+     * @ManyToOne(targetEntity="User", cascade={"persist"}, fetch="LAZY")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      * */
     protected $user;
@@ -26,10 +26,29 @@ class Comment
     protected $post_id;
 
     /**
-     * @ManyToOne(targetEntity="Post", cascade={"all"}, fetch="LAZY")
+     * @ManyToOne(targetEntity="Post", cascade={"persist"}, fetch="LAZY")
      * @JoinColumn(name="post_id", referencedColumnName="id")
      * */
     protected $post;
+
+    /** @Column(type="datetime", nullable=false) * */
+    protected $date;
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
 
     /**
      * @return mixed

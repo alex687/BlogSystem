@@ -6,7 +6,8 @@
             {{ post.getTitle() }}
         </h1>
 
-        <p> {{ post.getCategory().getName() }}</p>
+        <p><em>{{ post.getCategory().getName() }} </em> <span
+                    class="glyphicon glyphicon-time"></span> {{ post.getDate().format('Y-m-d H:i:s') }}</p>
 
         <p class="lead">
             by {{ post.getUser().getUsername() }}
@@ -15,6 +16,16 @@
         <p>{{ post.getText() }}</p>
         <hr>
     </div>
+
+    {% if user and user.getIsAdmin() %}
+        <div class="row">
+
+            <p>
+                <a href="{{ url('post/edit/' ~ post.getId()) }}" class="btn btn-sm btn-info">Edit Post</a>
+                <a href="{{ url('post/delete/' ~ post.getId()) }}" class="btn btn-sm btn-danger">Delete Post</a>
+            </p>
+        </div>
+    {% endif %}
 
     <div class="row">
         <h2>

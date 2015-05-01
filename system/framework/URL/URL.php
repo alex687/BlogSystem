@@ -24,7 +24,6 @@ class URL
         http_response_code(302);
         $requestHome = dirname($_SERVER['PHP_SELF']);
         header("Location :" . $_SERVER['HTTP_ORIGIN'] . $requestHome . '/' . $url);
-
         die();
     }
 }

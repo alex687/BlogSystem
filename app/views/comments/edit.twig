@@ -1,0 +1,31 @@
+{% extends "layout/base.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="row">
+            <h1 class="page-header">
+                Edit Comment
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="glyphicon glyphicon-user"></span> {{ comment.getUser().getUsername() }}
+                <span class="glyphicon glyphicon-time"></span> {{ comment.getDate().format('Y-m-d H:i:s') }}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <form method="post" action="{{ url("comment/edit/" ~ comment.getId()) }}">
+                    <input type="hidden" value="{{ token }}" name="formToken">
+                    <textarea class="form-control" name="commentText">{{ comment.getText() }}</textarea>
+                    <br>
+                    <input type="submit" class="btn" value="Edit Comment">
+                </form>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+
+{% endblock %}

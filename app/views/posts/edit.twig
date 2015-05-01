@@ -1,0 +1,76 @@
+{% extends "layout/base.twig" %}
+
+    {% block content %}
+        <div class="row">
+            <div class="row">
+                <h1 class="page-header">
+                    Editing Post
+                </h1>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="glyphicon glyphicon-user"></span> {{ post.getUser().getUsername() }}
+                    <span class="glyphicon glyphicon-time"></span> {{ post.getDate().format('Y-m-d H:i:s') }}
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <form method="post">
+                        <input type="hidden" value="{{ token }}" name="formToken">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                Title
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" name="title" class="form-control" required="required"
+                                       placeholder="Post title" {{ 'value='~ oldInput.title ~'' | default(post.getTitle()) }}>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                Text
+                            </div>
+                            <div class="col-md-10">
+                        <textarea name="text" class="form-control"
+                                  placeholder="Post text">{{ oldInput.text | default(post.getText()) }}</textarea>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                Category:
+                            </div>
+                            <div class="col-md-10">
+                                <select name="category">
+                                    {% for category in categories %}
+                                        {% if category.id == post.getCategoryId() %}
+                                            <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                                        {% else %}
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <input type="submit" value="Edit" class="btn btn-danger">
+                        <a href="{{ url('post/get/' ~ post.getId()) }}" class="btn btn-info">View post with comments</a>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ error | default("") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+    {% endblock %}

@@ -23,7 +23,7 @@ class Post
     protected $user_id;
 
     /**
-     * @ManyToOne(targetEntity="User", cascade={"all"}, fetch="LAZY")
+     * @ManyToOne(targetEntity="User", cascade={"persist"}, fetch="LAZY")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      * */
     protected $user;
@@ -33,7 +33,7 @@ class Post
     protected $category_id;
 
     /**
-     * @ManyToOne(targetEntity="Category", cascade={"all"}, fetch="LAZY")
+     * @ManyToOne(targetEntity="Category", cascade={"persist"}, fetch="LAZY")
      * @JoinColumn(name="category_id", referencedColumnName="id")
      * */
     protected $category;
@@ -48,10 +48,30 @@ class Post
      **/
     protected $tags;
 
+    /** @Column(type="datetime", nullable=false) * */
+    protected $date;
+
     public function __constrtuct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
 
     /**
      * @return mixed

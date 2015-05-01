@@ -5,7 +5,6 @@ namespace Controllers;
 use Database\FilterException;
 use Models\CategoryDao;
 use Models\CommentDao;
-use Models\Post;
 use Models\PostDao;
 use URL\URL;
 
@@ -30,17 +29,7 @@ class PostController extends BaseController
         $user = $this->getLoggedUser();
         $post = PostDao::get($this->entityManager, $id);
         if (empty($post)) {
-            //TODO return Not FOUND
-            die();
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ($user && isset($_POST['commentText'])) {
-                $commentText = $_POST['commentText'];
-
-                CommentDao::addComment($this->entityManager, $commentText, $user, $post);
-                $this->entityManager->flush();
-            }
+            $this->notFound();
         }
 
         $comments = CommentDao::getAllCommentsForPost($this->entityManager, $id);
@@ -50,9 +39,8 @@ class PostController extends BaseController
     public function add()
     {
         $user = $this->getLoggedUser();
-        if (!$user || !$user->getIsAdmin()) {
-            //todo Return not found
-            die();
+        if (empty($user) || !$user->getIsAdmin()) {
+            $this->notFound();
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -69,11 +57,67 @@ class PostController extends BaseController
                 $error = $e->getMessage();
                 $oldInput = $_POST;
 
-                $this->view("posts/add-edit.twig", compact("error", "oldInput"));
+                $this->view("posts/add.twig", compact("error", "oldInput" , 'user'));
+
                 return;
             }
         } else {
-            $this->view("posts/add-edit.twig");
+            $this->view("posts/add.twig", compact('user'));
+        }
+    }
+
+    public function edit($postId)
+    {
+        $user = $this->getLoggedUser();
+        if (empty($user) || !$user->getIsAdmin()) {
+            $this->notFound();
+        }
+
+        $post = PostDao::get($this->entityManager, $postId);
+        if (empty($post)) {
+            $this->notFound();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            try {
+                $title = $_POST['title'];
+                $text = $_POST['text'];
+                $category = CategoryDao::get($this->entityManager, $_POST['category']);
+
+                $post->setTitle($title);
+                $post->setText($text);
+                $post->setCategory($category);
+
+                $this->entityManager->flush();
+
+                URL::redirect("post/get/" . $post->getId());
+            } catch (FilterException $e) {
+                $error = $e->getMessage();
+                $oldInput = $_POST;
+
+                $this->view("posts/add-edit.twig", compact("error", "oldInput"));
+
+                return;
+            }
+        } else {
+            $this->view("posts/edit.twig", compact("post"));
+        }
+    }
+
+    public function delete($postId)
+    {
+        $this->checkIsAdmin();
+
+        $post = PostDao::get($this->entityManager, $postId);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->entityManager->remove($post);
+
+            $this->entityManager->flush();
+
+            URL::redirect('post/all');
+
+        } else {
+            $this->view('posts/delete.twig', compact("post"));
         }
     }
 }

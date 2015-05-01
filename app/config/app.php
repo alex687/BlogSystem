@@ -1,5 +1,5 @@
 <?php
 return array(
     "debug" => true,
-    "salt" => "podsofspdsdpofk23895"
+    "notFoundUrl" => "error/notFound"
 );
