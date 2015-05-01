@@ -25,6 +25,8 @@ class PostDao
         $post->setTitle($title);
 
         $entityManager->persist($post);
+
+        return $post;
     }
 
     public static function getAllPosts(EntityManager $entityManager, $postsPerPage, $page)

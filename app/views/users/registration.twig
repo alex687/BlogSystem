@@ -1,4 +1,4 @@
-{% extends "base.twig" %}
+{% extends "../layout/base.twig" %}
 
 {% block content %}
     <div class="row">
@@ -11,20 +11,20 @@
                 <input type="hidden" value="{{ token }}" name="formToken">
 
                 <div class="row">
-                    <div class="col-md-12"><input type="text" name="username" class="form-control"
+                    <div class="col-md-12"><input type="text" name="username" class="form-control"  required="required"
                                                   placeholder="Username" {{ 'value='~ oldInput.username ~'' | default('') }}>
                     </div>
                 </div>
                 <br>
 
                 <div class="row">
-                    <div class="col-md-12"><input type="password" name="password" class="form-control"
+                    <div class="col-md-12"><input type="password" name="password" class="form-control" required="required"
                                                   placeholder="Password"></div>
                 </div>
                 <br>
 
                 <div class="row">
-                    <div class="col-md-12"><input type="email" name="email" class="form-control"
+                    <div class="col-md-12"><input type="email" name="email" class="form-control" required="required"
                                                   placeholder="Email" {{ 'value='~ oldInput.email ~'' | default('') }}>
                     </div>
                 </div>

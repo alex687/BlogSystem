@@ -36,7 +36,7 @@ abstract class BaseController extends Controller
 
     public function view($templateURI, $variables = array())
     {
-        $categories = $this->entityManager->createQuery("SELECT c.name FROM Models\Category c ")->getArrayResult();
+        $categories = $this->entityManager->createQuery("SELECT c.name, c.id FROM Models\Category c ")->getArrayResult();
         $token = $_SESSION["formToken"];
 
         $variables['categories'] = $categories;

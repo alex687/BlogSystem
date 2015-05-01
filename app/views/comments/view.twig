@@ -1,0 +1,9 @@
+{% for comment in comments %}
+<div class="row">
+    <h3>
+        <a href="#"> {{ comment.getUser().getUsername() }}</a>
+    </h3>
+    {{ comment.getText() }}
+    <hr>
+</div>
+{% endfor %}

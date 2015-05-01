@@ -2,9 +2,12 @@
 
 namespace Controllers;
 
+use Database\FilterException;
+use Models\CategoryDao;
 use Models\CommentDao;
 use Models\Post;
 use Models\PostDao;
+use URL\URL;
 
 class PostController extends BaseController
 {
@@ -15,11 +18,11 @@ class PostController extends BaseController
             $page = $_GET['page'];
         }
 
-        $posts = PostDao::getAllPosts($this->entityManager, $page);
-        $hasNextPage = (Post::countPosts($this->entityManager) / 10) > $page;
+        $posts = PostDao::getAllPosts($this->entityManager, 10, $page);
+        $hasNextPage = (PostDao::countPosts($this->entityManager) / 10) > $page;
         $user = $this->getLoggedUser();
 
-        $this->view("home.twig", compact("user", "posts", "page", "hasNextPage"));
+        $this->view("posts/view-all.twig", compact("user", "posts", "page", "hasNextPage"));
     }
 
     public function get($id)
@@ -46,7 +49,31 @@ class PostController extends BaseController
 
     public function add()
     {
-        
-    }
+        $user = $this->getLoggedUser();
+        if (!$user || !$user->getIsAdmin()) {
+            //todo Return not found
+            die();
+        }
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            try {
+                $title = $_POST['title'];
+                $text = $_POST['text'];
+                $category = CategoryDao::get($this->entityManager, $_POST['category']);
+
+                $post = PostDao::add($this->entityManager, $text, $title, $user, $category, array());
+                $this->entityManager->flush();
+
+                URL::redirect("post/get/" . $post->getId());
+            } catch (FilterException $e) {
+                $error = $e->getMessage();
+                $oldInput = $_POST;
+
+                $this->view("posts/add-edit.twig", compact("error", "oldInput"));
+                return;
+            }
+        } else {
+            $this->view("posts/add-edit.twig");
+        }
+    }
 }

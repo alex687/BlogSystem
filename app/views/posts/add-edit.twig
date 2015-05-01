@@ -1,0 +1,59 @@
+{% extends "layout/base.twig" %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="page-header">
+            Add Post
+        </h1>
+
+        <div class="col-md-8">
+            <form method="post">
+                <input type="hidden" value="{{ token }}" name="formToken">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Title
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" name="title" class="form-control" required="required"
+                               placeholder="Post title" {{ 'value='~ oldInput.title ~'' | default('') }}>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Text
+                    </div>
+                    <div class="col-md-9">
+                        <textarea name="text" placeholder="Post text">{{ oldInput.text | default('') }}</textarea>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Category:
+                    </div>
+                    <div class="col-md-9">
+                        <select name="category">
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Submit" class="btn pull-right">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ error | default("") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,9 @@
 
 namespace Models;
 
+use Database\FilterException;
+use Database\FilterVariables;
+
 /**
  * @Entity @Table(name="posts", indexes={@Index(name="text_index", columns={"title"})})
  **/
@@ -104,7 +107,12 @@ class Post
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        if (FilterVariables::minLength($title, 3)) {
+            $this->title = $title;
+        }
+        else{
+            throw  new FilterException("Title must be at least 3 characters");
+        }
     }
 
     /**
@@ -120,7 +128,12 @@ class Post
      */
     public function setText($text)
     {
-        $this->text = $text;
+        if (FilterVariables::minLength($text, 3)) {
+            $this->text = $text;
+        }
+        else {
+            throw  new FilterException("Text must be at least 3 characters");
+        }
     }
 
     /**
