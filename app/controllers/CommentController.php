@@ -49,7 +49,7 @@ class CommentController extends BaseController
 
             URL::redirect('post/get/' . $postId);
         } else {
-            //TODO return not found
+            $this->notFound();
         }
     }
 

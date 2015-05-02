@@ -5,6 +5,7 @@ namespace Controllers;
 use Database\FilterException;
 use Models\CategoryDao;
 use Models\CommentDao;
+use Models\Post;
 use Models\PostDao;
 use URL\URL;
 
@@ -31,6 +32,8 @@ class PostController extends BaseController
         if (empty($post)) {
             $this->notFound();
         }
+        $post->setViews($post->getViews() + 1);
+        $this->entityManager->flush();
 
         $comments = CommentDao::getAllCommentsForPost($this->entityManager, $id);
         $this->view("posts/view.twig", compact("user", "post", "comments"));
@@ -50,6 +53,8 @@ class PostController extends BaseController
                 $category = CategoryDao::get($this->entityManager, $_POST['category']);
 
                 $post = PostDao::add($this->entityManager, $text, $title, $user, $category, array());
+                PostDao::addTagsToPost($this->entityManager, $post, $_POST['tags']);
+
                 $this->entityManager->flush();
 
                 URL::redirect("post/get/" . $post->getId());
@@ -57,7 +62,7 @@ class PostController extends BaseController
                 $error = $e->getMessage();
                 $oldInput = $_POST;
 
-                $this->view("posts/add.twig", compact("error", "oldInput" , 'user'));
+                $this->view("posts/add.twig", compact("error", "oldInput", 'user'));
 
                 return;
             }
@@ -87,6 +92,7 @@ class PostController extends BaseController
                 $post->setTitle($title);
                 $post->setText($text);
                 $post->setCategory($category);
+                PostDao::addTagsToPost($this->entityManager, $post, $_POST['tags']);
 
                 $this->entityManager->flush();
 
@@ -100,7 +106,9 @@ class PostController extends BaseController
                 return;
             }
         } else {
-            $this->view("posts/edit.twig", compact("post"));
+            $tags = $this->tagsToStr($post);
+
+            $this->view("posts/edit.twig", compact("post", "tags"));
         }
     }
 
@@ -119,5 +127,16 @@ class PostController extends BaseController
         } else {
             $this->view('posts/delete.twig', compact("post"));
         }
+    }
+
+    private function tagsToStr(Post $post)
+    {
+        $tagsArr = array();
+        foreach($post->getTags() as $tag )
+        {
+            $tagsArr[] = $tag->getName();
+        }
+
+        return implode(',', $tagsArr);
     }
 }

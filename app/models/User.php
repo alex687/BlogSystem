@@ -29,7 +29,7 @@ class User
     /** @Column(type="string", nullable=true) * */
     protected $lastName;
 
-    /** @Column(type="boolean", nullable=false, options={"unsigned":true, "default":0}) * */
+    /** @Column(type="boolean", nullable=true, options={"unsigned":true, "default":0}) * */
     protected $isAdmin;
 
     /**

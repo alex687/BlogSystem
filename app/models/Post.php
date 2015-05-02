@@ -4,6 +4,7 @@ namespace Models;
 
 use Database\FilterException;
 use Database\FilterVariables;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity @Table(name="posts", indexes={@Index(name="text_index", columns={"title"})})
@@ -43,7 +44,7 @@ class Post
      * @ManyToMany(targetEntity="Tag")
      * @JoinTable(name="posts_tags",
      *      joinColumns={@JoinColumn(name="post_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="id", unique=false)}
      *      )
      **/
     protected $tags;
@@ -51,9 +52,41 @@ class Post
     /** @Column(type="datetime", nullable=false) * */
     protected $date;
 
+    /** @Column(type="integer", nullable=true, options={"unsigned":true, "default":0})) * */
+    protected $views;
+
     public function __constrtuct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getViews()
+    {
+        return $this->views;
+    }
+
+    /**
+     * @param mixed $views
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
     }
 
     /**
@@ -129,8 +162,7 @@ class Post
     {
         if (FilterVariables::minLength($title, 3)) {
             $this->title = $title;
-        }
-        else{
+        } else {
             throw  new FilterException("Title must be at least 3 characters");
         }
     }
@@ -150,8 +182,7 @@ class Post
     {
         if (FilterVariables::minLength($text, 3)) {
             $this->text = $text;
-        }
-        else {
+        } else {
             throw  new FilterException("Text must be at least 3 characters");
         }
     }

@@ -27,7 +27,7 @@ class UserController extends BaseController
 
             URL::redirect('');
         } else {
-            $this->view("login.twig");
+            $this->view("users/login.twig");
         }
     }
 
@@ -57,10 +57,10 @@ class UserController extends BaseController
                 $error = $e->getMessage();
                 $oldInput = $_POST;
 
-                $this->view("registration.twig", compact("error", "oldInput"));
+                $this->view("users/registration.twig", compact("error", "oldInput"));
             }
         } else {
-            $this->view("registration.twig");
+            $this->view("users/registration.twig");
         }
     }
 

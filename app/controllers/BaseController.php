@@ -19,7 +19,7 @@ abstract class BaseController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (empty($_POST['formToken']) || $_SESSION["formToken"] != $_POST['formToken']) {
-                die; // Todo fix this
+                $this->notFound();
             }
         }
     }

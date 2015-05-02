@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Sa6o
- * Date: 1.5.2015 г.
- * Time: 14:53 ч.
- */
 
 namespace Models;
 

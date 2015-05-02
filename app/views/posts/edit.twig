@@ -60,6 +60,18 @@
                             </div>
                         </div>
                         <br>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                Tags
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" name="tags" class="form-control" required="required"
+                                       placeholder="tag1,tag2,tag3" {{ 'value='~ oldInput.tags ~'' | default(tags) }}>
+                            </div>
+                        </div>
+                        <br>
+
                         <input type="submit" value="Edit" class="btn btn-danger">
                         <a href="{{ url('post/get/' ~ post.getId()) }}" class="btn btn-info">View post with comments</a>
 

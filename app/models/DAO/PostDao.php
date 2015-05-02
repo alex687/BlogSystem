@@ -2,8 +2,9 @@
 namespace Models;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use  \Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class PostDao
 {
@@ -28,6 +29,24 @@ class PostDao
         $entityManager->persist($post);
 
         return $post;
+    }
+
+    public static function addTagsToPost(EntityManager $entityManager, Post $post, $tagsStr)
+    {
+        $tagsNames = array_filter(explode(',', $tagsStr));
+
+        $tags = new ArrayCollection();
+        foreach ($tagsNames as $tagStr) {
+            $tag = $entityManager->getRepository("Models\Tag")->findOneBy(array("name" => $tagStr));
+
+            if (empty($tag)) {
+                $tag = TagDao::add($entityManager, $tagStr);
+            }
+            if (!$tags->contains($tag)) {
+                $tags->add($tag);
+            }
+        }
+        $post->setTags($tags);
     }
 
     public static function getAllPosts(EntityManager $entityManager, $postsPerPage, $page)

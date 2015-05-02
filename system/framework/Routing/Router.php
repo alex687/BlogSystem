@@ -58,7 +58,6 @@ class Router
 
        $error = new ErrorController();
        $error->notFound();
-
     }
 
     private function getController($controllerName)

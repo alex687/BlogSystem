@@ -6,8 +6,11 @@
             {{ post.getTitle() }}
         </h1>
 
-        <p><em>{{ post.getCategory().getName() }} </em> <span
-                    class="glyphicon glyphicon-time"></span> {{ post.getDate().format('Y-m-d H:i:s') }}</p>
+        <p>
+            <span class="glyphicon glyphicon-paperclip"></span><em>{{ post.getCategory().getName() }} </em>
+            <span class="glyphicon glyphicon-time"></span> {{ post.getDate().format('Y-m-d H:i:s') }}
+            <span class="glyphicon glyphicon-stats"></span> {{ post.getViews() }}
+        </p>
 
         <p class="lead">
             by {{ post.getUser().getUsername() }}
@@ -15,6 +18,11 @@
 
         <p>{{ post.getText() }}</p>
         <hr>
+        <p><span class="glyphicon glyphicon-tags"></span> {% for tag in post.getTags() %}
+                {{ tag.getName() }}
+            {% endfor %}
+        </p>
+
     </div>
 
     {% if user and user.getIsAdmin() %}
